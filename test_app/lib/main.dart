@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'nav/navigate.dart';
+import 'package:test_app/pages/sign_in.dart';
 // import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -15,8 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Google Sign In",
-      initialRoute: '/sign-in',
-      routes: Navigate.routes,
+      home: SignInScreen(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

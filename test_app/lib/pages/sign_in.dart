@@ -1,102 +1,57 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_app/auth/authentication.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:test_app/auth/sign_in_button.dart';
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatelessWidget {
+class CustomColors {
+  static final Color firebaseNavy = Color(0xFF2C384A);
+  static final Color firebaseOrange = Color(0xFFF57C00);
+  static final Color firebaseAmber = Color(0xFFFFA000);
+  static final Color firebaseYellow = Color(0xFFFFCA28);
+  static final Color firebaseGrey = Color(0xFFECEFF1);
+  static final Color googleBackground = Color(0xFF4285F4);
+}
+
+class SignInScreen extends StatefulWidget {
+  @override
+  _SignInScreenState createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    OutlineInputBorder border = OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.yellow, width: 3.0));
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.blue,
-        body: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(children: <TextSpan>[
-                TextSpan(
-                    text: "Sign In",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30.0,
-                    )),
-              ])),
-          SizedBox(height: size.height * 0.01),
-          GoogleSignIn(),
-        ])));
-  }
-}
-
-class GoogleSignIn extends StatefulWidget {
-  GoogleSignIn({Key? key}) : super(key: key);
-
-  @override
-  _GoogleSignInState createState() => _GoogleSignInState();
-}
-
-class _GoogleSignInState extends State<GoogleSignIn> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return !isLoading
-        ? SizedBox(
-            width: size.width * 0.8,
-            child: OutlinedButton.icon(
-              icon: FaIcon(FontAwesomeIcons.google),
-              onPressed: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                FirebaseService service = new FirebaseService();
-                try {
-                  await service.signInwithGoogle();
-                  Navigator.pushReplacementNamed(context, '/home');
-                } catch (e) {
-                  if (e is FirebaseAuthException) {
-                    showMessage(e.message!);
+      backgroundColor: CustomColors.firebaseNavy,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            bottom: 20.0,
+            top: 50.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(),
+              FutureBuilder(
+                future: Authentication.initializeFirebase(context: context),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error initializing Firebase');
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return GoogleSignInButton();
                   }
-                }
-                setState(() {
-                  isLoading = false;
-                });
-              },
-              label: Text(
-                "Sign In With Google",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.grey),
-                  side: MaterialStateProperty.all<BorderSide>(BorderSide.none)),
-            ),
-          )
-        : CircularProgressIndicator();
-  }
-
-  void showMessage(String message) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Error"),
-            content: Text(message),
-            actions: [
-              TextButton(
-                child: Text("Ok"),
-                onPressed: () {
-                  Navigator.of(context).pop();
+                  return CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      CustomColors.firebaseOrange,
+                    ),
+                  );
                 },
-              )
+              ),
             ],
-          );
-        });
+          ),
+        ),
+      ),
+    );
   }
 }
