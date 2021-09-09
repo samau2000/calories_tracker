@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:test_app/pages/sign_in.dart';
 // import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
