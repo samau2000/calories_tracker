@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_app/auth/authentication.dart';
 import 'package:test_app/pages/sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:test_app/pages/recipes.dart';
 
 class BarcodeScreen extends StatefulWidget {
   const BarcodeScreen({Key? key, required User user})
@@ -24,8 +25,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
   bool _isSigningOut = false;
   String _scanBarcode = 'Unknown';
   dynamic _json = '';
-  int _calories = 0;
-
+  dynamic _calories = 0;
 
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
@@ -77,7 +77,8 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
     );
 
     final responseJson = jsonDecode(response.body);
-    print(responseJson['foods'][0]['foodNutrients'][3]['value']);
+    print(responseJson['foods'][0]);
+    print(responseJson['foods'][0]['foodNutrients'][3]);
     setState(() {
       _json = responseJson;
       _calories = responseJson['foods'][0]['foodNutrients'][3]['value'];
@@ -121,7 +122,15 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
                             onPressed: () => scanBarcodeNormal(),
                             child: Text('Start barcode scan')),
                         ElevatedButton(
-                            onPressed: () => listRecipes(),
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => listRecipe(
+                                    user: _user,
+                                  ),
+                                ),
+                              );
+                            },
                             child: Text('Find Recipes')),
                         Text("Calories per serving : $_calories\n",
                             style: TextStyle(fontSize: 20)),
