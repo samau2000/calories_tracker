@@ -24,7 +24,8 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
   bool _isSigningOut = false;
   String _scanBarcode = 'Unknown';
   dynamic _json = '';
-  dynamic _calories = 0;
+  int _calories = 0;
+
 
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
@@ -76,8 +77,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
     );
 
     final responseJson = jsonDecode(response.body);
-    print(responseJson['foods'][0]);
-    print(responseJson['foods'][0]['foodNutrients'][3]);
+    print(responseJson['foods'][0]['foodNutrients'][3]['value']);
     setState(() {
       _json = responseJson;
       _calories = responseJson['foods'][0]['foodNutrients'][3]['value'];
