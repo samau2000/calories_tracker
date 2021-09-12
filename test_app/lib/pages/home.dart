@@ -23,7 +23,8 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
   late User _user;
   bool _isSigningOut = false;
   String _scanBarcode = 'Unknown';
-  String _json = '';
+  dynamic _json = '';
+  int _calories = 0;
 
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
@@ -75,9 +76,10 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
     );
 
     final responseJson = jsonDecode(response.body);
-    print(responseJson);
+    print(responseJson['foods'][0]['foodNutrients'][3]['value']);
     setState(() {
-      _json = responseJson['foods'][0]['foodNutrients'][3]['nutrientNumber'];
+      _json = responseJson;
+      _calories = responseJson['foods'][0]['foodNutrients'][3]['value'];
     });
   }
 
@@ -120,7 +122,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
                         ElevatedButton(
                             onPressed: () => listRecipes(),
                             child: Text('Find Recipes')),
-                        Text('Scan result : $_json\n',
+                        Text("Calories per serving : $_calories\n",
                             style: TextStyle(fontSize: 20)),
                         SizedBox(height: 16.0),
                         _isSigningOut
