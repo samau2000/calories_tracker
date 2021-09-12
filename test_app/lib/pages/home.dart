@@ -1,9 +1,12 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_app/auth/authentication.dart';
 import 'package:test_app/pages/sign_in.dart';
+import 'package:http/http.dart' as http;
 
 class BarcodeScreen extends StatefulWidget {
   const BarcodeScreen({Key? key, required User user})
@@ -20,6 +23,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
   late User _user;
   bool _isSigningOut = false;
   String _scanBarcode = 'Unknown';
+  String _json = '';
 
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
@@ -49,6 +53,34 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
 
   Future<void> listRecipes() async {}
 
+  Future<void> listCalories() async {
+    Map<String, String> headers = {
+      'accept': 'application/json',
+      'Content-type': 'application/json',
+      'X-Api-Key': 'NGL5F8A54IfSZhLLq0g60jFUZ3IdCLXQVqex7A8h',
+    };
+
+    Map<String, String> body = {
+      'query': _scanBarcode,
+      'sortBy': 'dataType.keyword',
+      'sortOrder': 'asc',
+    };
+
+    var body_json = json.encode(body);
+
+    final response = await http.post(
+      Uri.parse('https://api.nal.usda.gov/fdc/v1/foods/search'),
+      headers: headers,
+      body: body_json,
+    );
+
+    final responseJson = jsonDecode(response.body);
+    print(responseJson);
+    setState(() {
+      _json = responseJson['foods'][0]['foodNutrients'][3]['nutrientNumber'];
+    });
+  }
+
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
     // try/catch PlatfromException is used to account for when platform messages fail.
@@ -59,7 +91,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-
+    listCalories();
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -88,7 +120,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
                         ElevatedButton(
                             onPressed: () => listRecipes(),
                             child: Text('Find Recipes')),
-                        Text('Scan result : $_scanBarcode\n',
+                        Text('Scan result : $_json\n',
                             style: TextStyle(fontSize: 20)),
                         SizedBox(height: 16.0),
                         _isSigningOut
