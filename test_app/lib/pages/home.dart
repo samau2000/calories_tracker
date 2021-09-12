@@ -26,6 +26,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
   dynamic _json = '';
   int _calories = 0;
 
+
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => SignInScreen(),
