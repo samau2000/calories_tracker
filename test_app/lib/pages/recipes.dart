@@ -1,6 +1,10 @@
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:test_app/database/firebase_database.dart';
+import 'package:test_app/database/providers.dart';
+import 'package:test_app/database/recipe_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /*
 void main() => runApp(MaterialApp(
@@ -14,19 +18,22 @@ void main() => runApp(MaterialApp(
 */
 
 class listRecipe extends StatefulWidget {
-  const listRecipe({Key? key, required User user})
+  const listRecipe({Key? key, required User user, this.recipe})
       : _user = user,
         super(key: key);
 
   final User _user;
+  final Recipe? recipe;
   @override
   _listRecipeState createState() => _listRecipeState();
 }
 
 class _listRecipeState extends State<listRecipe> {
   late User _user;
-  List recipe = <String>[];
+  List recipe_old = <String>[];
   String input = "";
+  final _formKey = GlobalKey<FormState>();
+  String? name;
 
   // createRecipe() {
   //   DocumentReference documentReference =
@@ -43,9 +50,56 @@ class _listRecipeState extends State<listRecipe> {
 
   @override
   void initState() {
-    recipe.add("Salad");
-    recipe.add("Burger");
-    recipe.add("Fries");
+    // recipe.add("Salad");
+    // recipe.add("Burger");
+    // recipe.add("Fries");
+    super.initState();
+    if (widget.recipe != null) {
+      name = widget.recipe?.name;
+    }
+  }
+
+  bool _validateAndSaveForm() {
+    final form = _formKey.currentState!;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _submit() async {
+    if (_validateAndSaveForm()) {
+      try {
+        final database = ref.read<FirestoreDatabase?>(databaseProvider)!;
+        final recipes = await database.jobsStream().first;
+        final allLowerCaseNames =
+            recipes.map((recipe) => recipe.name.toLowerCase()).toList();
+        if (widget.recipe != null) {
+          allLowerCaseNames.remove(widget.recipe!.name.toLowerCase());
+          // }
+          // if (allLowerCaseNames.contains(name?.toLowerCase())) {
+          //   unawaited(showAlertDialog(
+          //     context: context,
+          //     title: 'Name already used',
+          //     content: 'Please choose a different job name',
+          //     defaultActionText: 'OK',
+          //   ));
+        } else {
+          final id = widget.recipe?.id ?? documentIdFromCurrentDate();
+          final recipe = Recipe(id: id, name: name ?? '');
+          await database.setJob(recipe);
+          Navigator.of(context).pop();
+        }
+      } catch (e) {
+        // unawaited(showExceptionAlertDialog(
+        //   context: context,
+        //   title: 'Operation failed',
+        //   exception: e,
+        // ));
+        print(e);
+      }
+    }
   }
 
   @override
@@ -66,11 +120,12 @@ class _listRecipeState extends State<listRecipe> {
                     }),
                     actions: <Widget>[
                       TextButton(
-                          onPressed: () {
-                            setState(() {
-                              recipe.add(input);
-                            });
-                          },
+                          onPressed: () => _submit(),
+                          // {
+                          // setState(() {
+                          //   recipe.add(input);
+                          // });
+                          // },
                           child: Text("Add"))
                     ],
                   );
@@ -81,13 +136,13 @@ class _listRecipeState extends State<listRecipe> {
             color: Colors.white,
           )),
       body: ListView.builder(
-          itemCount: recipe.length,
+          itemCount: recipe_old.length,
           itemBuilder: (BuildContext context, int index) {
             return Dismissible(
-                key: Key(recipe[index]),
+                key: Key(recipe_old[index]),
                 child: Card(
                   child: ListTile(
-                      title: Text(recipe[index]),
+                      title: Text(recipe_old[index]),
                       trailing: IconButton(
                         icon: Icon(
                           Icons.delete,
@@ -95,7 +150,7 @@ class _listRecipeState extends State<listRecipe> {
                         ),
                         onPressed: () {
                           setState(() {
-                            recipe.removeAt(index);
+                            recipe_old.removeAt(index);
                           });
                         },
                       )),
