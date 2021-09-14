@@ -6,6 +6,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_app/auth/authentication.dart';
 import 'package:test_app/pages/sign_in.dart';
+import 'package:test_app/pages/food_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_app/pages/recipes.dart';
 
@@ -95,7 +96,12 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-    listCalories();
+
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => FoodInfoScreen(
+              user: _user,
+              barcode: barcodeScanRes,
+            )));
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -132,8 +138,6 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
                               );
                             },
                             child: Text('Find Recipes')),
-                        Text("Calories per serving : $_calories\n",
-                            style: TextStyle(fontSize: 20)),
                         SizedBox(height: 16.0),
                         _isSigningOut
                             ? CircularProgressIndicator(

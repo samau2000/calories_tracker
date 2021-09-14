@@ -44,6 +44,7 @@ class _listRecipeState extends State<listRecipe> {
 
   @override
   void initState() {
+    _user = widget._user;
     recipe.add("Salad");
     recipe.add("Burger");
     recipe.add("Fries");
