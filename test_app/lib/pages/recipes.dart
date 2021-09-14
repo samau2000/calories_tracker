@@ -1,6 +1,7 @@
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:test_app/pages/recipe_details.dart';
 
 /*
 void main() => runApp(MaterialApp(
@@ -88,16 +89,36 @@ class _listRecipeState extends State<listRecipe> {
                 child: Card(
                   child: ListTile(
                       title: Text(recipe[index]),
-                      trailing: IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            recipe.removeAt(index);
-                          });
-                        },
+                      trailing: Wrap(
+                        spacing: 180,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.chevron_right,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => RecipeDetails(
+                                    user: _user,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                recipe.removeAt(index);
+                              });
+                            },
+                          )
+                        ],
                       )),
                 ));
           }),
