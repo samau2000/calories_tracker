@@ -5,7 +5,9 @@ import 'package:test_app/database/firebase_database.dart';
 import 'package:test_app/database/providers.dart';
 import 'package:test_app/database/recipe_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:test_app/database/firebase_database.dart';
+import 'package:flutter/services.dart';
+import 'package:pedantic/pedantic.dart';
 /*
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
