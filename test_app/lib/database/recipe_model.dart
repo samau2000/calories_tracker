@@ -1,32 +1,36 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+class RecipeModel {
+  late String id = "";
+  late String name;
+  late String desc;
 
-@immutable
-class Recipe extends Equatable {
-  const Recipe({required this.id, required this.name});
-  final String name;
-  final String id;
+  RecipeModel(
+    id,
+    name,
+    desc,
+  );
 
-  @override
-  List<Object> get props => [id, name];
-
-  @override
-  bool get stringify => true;
-
-  factory Recipe.fromMap(Map<String, dynamic>? data, String documentId) {
-    if (data == null) {
-      throw StateError('missing data for jobId: $documentId');
-    }
-    final name = data['name'] as String?;
-    if (name == null) {
-      throw StateError('missing name for jobId: $documentId');
-    }
-    return Recipe(id: documentId, name: name);
+  Map<String, Object> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'status': desc,
+    };
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-    };
+  RecipeModel fromMap(Map value) {
+    if (value == null) {
+      return RecipeModel("", "", "");
+    }
+
+    return RecipeModel(
+      value['id'],
+      value['name'],
+      value['desc'],
+    );
+  }
+
+  @override
+  String toString() {
+    return ('{id: $id, name: $name, status: $desc}');
   }
 }

@@ -2,12 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_app/database/firebase_database.dart';
-import 'package:test_app/database/providers.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:test_app/database/recipe_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/database/firebase_database.dart';
-import 'package:flutter/services.dart';
-import 'package:pedantic/pedantic.dart';
+
 /*
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -18,14 +16,14 @@ void main() => runApp(MaterialApp(
       home: MyApp(),
     ));
 */
+Future<void> listC() async {}
 
 class listRecipe extends StatefulWidget {
-  const listRecipe({Key? key, required User user, this.recipe})
+  const listRecipe({Key? key, required User user})
       : _user = user,
         super(key: key);
 
   final User _user;
-  final Recipe? recipe;
   @override
   _listRecipeState createState() => _listRecipeState();
 }
@@ -55,53 +53,6 @@ class _listRecipeState extends State<listRecipe> {
     // recipe.add("Salad");
     // recipe.add("Burger");
     // recipe.add("Fries");
-    super.initState();
-    if (widget.recipe != null) {
-      name = widget.recipe?.name;
-    }
-  }
-
-  bool _validateAndSaveForm() {
-    final form = _formKey.currentState!;
-    if (form.validate()) {
-      form.save();
-      return true;
-    }
-    return false;
-  }
-
-  Future<void> _submit() async {
-    if (_validateAndSaveForm()) {
-      try {
-        final database = ref.read<FirestoreDatabase?>(databaseProvider)!;
-        final recipes = await database.jobsStream().first;
-        final allLowerCaseNames =
-            recipes.map((recipe) => recipe.name.toLowerCase()).toList();
-        if (widget.recipe != null) {
-          allLowerCaseNames.remove(widget.recipe!.name.toLowerCase());
-          // }
-          // if (allLowerCaseNames.contains(name?.toLowerCase())) {
-          //   unawaited(showAlertDialog(
-          //     context: context,
-          //     title: 'Name already used',
-          //     content: 'Please choose a different job name',
-          //     defaultActionText: 'OK',
-          //   ));
-        } else {
-          final id = widget.recipe?.id ?? documentIdFromCurrentDate();
-          final recipe = Recipe(id: id, name: name ?? '');
-          await database.setJob(recipe);
-          Navigator.of(context).pop();
-        }
-      } catch (e) {
-        // unawaited(showExceptionAlertDialog(
-        //   context: context,
-        //   title: 'Operation failed',
-        //   exception: e,
-        // ));
-        print(e);
-      }
-    }
   }
 
   @override
@@ -122,7 +73,7 @@ class _listRecipeState extends State<listRecipe> {
                     }),
                     actions: <Widget>[
                       TextButton(
-                          onPressed: () => _submit(),
+                          onPressed: () => listC(),
                           // {
                           // setState(() {
                           //   recipe.add(input);

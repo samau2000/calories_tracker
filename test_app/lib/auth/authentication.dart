@@ -21,15 +21,15 @@ class Authentication {
     required BuildContext context,
   }) async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
+    // module.exports.firebaseApp = firebaseApp;
 
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => BarcodeScreen(
-            user: user,
-          ),
+          builder: (context) =>
+              BarcodeScreen(user: user, firebase: firebaseApp),
         ),
       );
     }

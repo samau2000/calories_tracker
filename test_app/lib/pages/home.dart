@@ -8,13 +8,17 @@ import 'package:test_app/auth/authentication.dart';
 import 'package:test_app/pages/sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_app/pages/recipes.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class BarcodeScreen extends StatefulWidget {
-  const BarcodeScreen({Key? key, required User user})
+  const BarcodeScreen(
+      {Key? key, required User user, required FirebaseApp firebase})
       : _user = user,
+        _firebase = firebase,
         super(key: key);
 
   final User _user;
+  final FirebaseApp _firebase;
 
   @override
   _BarcodeScreenState createState() => _BarcodeScreenState();
@@ -22,6 +26,7 @@ class BarcodeScreen extends StatefulWidget {
 
 class _BarcodeScreenState extends State<BarcodeScreen> {
   late User _user;
+  late FirebaseApp _firebase;
   bool _isSigningOut = false;
   String _scanBarcode = 'Unknown';
   dynamic _json = '';
@@ -127,6 +132,7 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => listRecipe(
                                     user: _user,
+                                    firebase: _firebase,
                                   ),
                                 ),
                               );

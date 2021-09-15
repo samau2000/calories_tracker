@@ -2,14 +2,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app/pages/home.dart';
 import 'package:test_app/auth/authentication.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class GoogleSignInButton extends StatefulWidget {
+  const GoogleSignInButton({required FirebaseApp firebase})
+      : _firebase = firebase;
+
+  final FirebaseApp _firebase;
+
   @override
   _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   bool _isSigningIn = false;
+  late FirebaseApp _firebase;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +51,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     MaterialPageRoute(
                       builder: (context) => BarcodeScreen(
                         user: user,
+                        firebase: _firebase,
                       ),
                     ),
                   );
