@@ -133,6 +133,8 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => listRecipe(
                                     user: _user,
+                                    calories: null,
+                                    foodname: null,
                                   ),
                                 ),
                               );

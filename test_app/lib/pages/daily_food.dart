@@ -1,44 +1,54 @@
 import 'package:flutter/material.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-//stl -->
-class DailyFoodScreen extends StatelessWidget {
+class DailyFoodScreen extends StatefulWidget {
   const DailyFoodScreen({Key? key, required User user})
       : _user = user,
         super(key: key);
 
   final User _user;
   @override
-  MyStaticListView createState() => MyStaticListView();
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: Scaffold(
-        appBar: new AppBar(title: Text("Daily Intake")),
-        body: MyStaticListView(),
-      ),
-    );
-  }
+  _DailyFoodScreenState createState() => _DailyFoodScreenState();
 }
 
-class MyStaticListView extends StatelessWidget {
-  const MyStaticListView({Key? key}) : super(key: key);
+class _DailyFoodScreenState extends State<DailyFoodScreen> {
+  final dbRef = FirebaseDatabase.instance.reference().child("Daily Food");
+  List<Map<dynamic, dynamic>> lists = [];
 
   @override
   Widget build(BuildContext context) {
-    return new ListView(
-      children: <Widget>[
-        ListTile(
-          title: Text("Mushrooms"),
-          subtitle: Text("4 servings | 543 calories"),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Daily Intake"),
         ),
-        ListTile(
-          title: Text("flour"),
-          subtitle: Text("5 servings | 50 calories"),
-        ),
-      ],
-    );
+        body: FutureBuilder(
+            future: dbRef.once(),
+            builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+              if (snapshot.hasData) {
+                lists.clear();
+                Map<dynamic, dynamic> values = snapshot.data!.value;
+                values.forEach((key, values) {
+                  lists.add(values);
+                });
+                return new ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: lists.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Name: " + lists[index]["name"]),
+                            Text("Calories: " +
+                                lists[index]["calories"].toString()),
+                            // Text("Type: " + lists[index]["type"]),
+                          ],
+                        ),
+                      );
+                    });
+              }
+              return CircularProgressIndicator();
+            }));
   }
 }
