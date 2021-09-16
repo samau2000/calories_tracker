@@ -1,44 +1,83 @@
 import 'package:flutter/material.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 //stl -->
-class RecipeDetails extends StatelessWidget {
-  const RecipeDetails({Key? key, required User user})
+class RecipeDetails extends StatefulWidget {
+  const RecipeDetails({Key? key, required User user, required String recipe})
       : _user = user,
+        _recipe = recipe,
         super(key: key);
 
   final User _user;
+  final String _recipe;
   @override
-  MyStaticListView createState() => MyStaticListView();
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: Scaffold(
-        appBar: new AppBar(title: Text("Pizza Recipe")),
-        body: MyStaticListView(),
-      ),
-    );
-  }
+  _RecipeDetailsState createState() => _RecipeDetailsState();
 }
 
-class MyStaticListView extends StatelessWidget {
-  const MyStaticListView({Key? key}) : super(key: key);
+class _RecipeDetailsState extends State<RecipeDetails> {
+  late User _user;
+  late String _recipe;
+  List recipe = <String>[];
+  String input = "";
+  late final dbRef =
+      FirebaseDatabase.instance.reference().child("Recipes").child(_recipe);
+
+  List<Map<dynamic, dynamic>> lists = [];
+
+  @override
+  void initState() {
+    _user = widget._user;
+    _recipe = widget._recipe;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return new ListView(
-      children: <Widget>[
-        ListTile(
-          title: Text("Mushrooms"),
-          subtitle: Text("4 servings | 543 calories"),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Recipes"),
         ),
-        ListTile(
-          title: Text("flour"),
-          subtitle: Text("5 servings | 50 calories"),
-        ),
-      ],
-    );
+        body: FutureBuilder(
+            future: dbRef.once(),
+            builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+              if (snapshot.hasData) {
+                lists.clear();
+                Map<dynamic, dynamic> values = snapshot.data!.value;
+                print(values);
+                values['ingredients'].forEach((key, values) {
+                  lists.add(values);
+                });
+                List keys = values.keys.toList();
+                return ListView.builder(
+                    itemCount: lists.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Dismissible(
+                          key: Key(lists[index]['name']),
+                          child: Card(
+                            child: ListTile(
+                                title: Text(lists[index]['name']),
+                                trailing: Wrap(
+                                  spacing: 180,
+                                  children: <Widget>[
+                                    Text('cals:' +
+                                        lists[index]['calories'].toString()),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          recipe.removeAt(index);
+                                        });
+                                      },
+                                    )
+                                  ],
+                                )),
+                          ));
+                    });
+              }
+              return CircularProgressIndicator();
+            }));
   }
 }

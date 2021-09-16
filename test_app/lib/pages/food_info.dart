@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:test_app/pages/recipes.dart';
 import 'package:test_app/pages/daily_food.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_spinbox/material.dart';
 
 class FoodInfoScreen extends StatefulWidget {
   const FoodInfoScreen({Key? key, required User user, required String barcode})
@@ -25,9 +27,12 @@ class _FoodInfoScreenState extends State<FoodInfoScreen> {
   String _barcode = 'Unknown';
   dynamic _json = '';
   dynamic _calories = 0;
+  dynamic _foodname = '';
+  dynamic _ncalories = 0;
 
   @override
   void initState() {
+    listCalories();
     _user = widget._user;
     _barcode = widget._barcode;
     super.initState();
@@ -36,6 +41,12 @@ class _FoodInfoScreenState extends State<FoodInfoScreen> {
   Future<void> listRecipes() async {}
 
   Future<void> dailyTracker() async {
+    final dbRef = FirebaseDatabase.instance.reference().child("Daily Food");
+    dbRef.push().set({
+      "name": _foodname,
+      "calories": _calories,
+    });
+
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => DailyFoodScreen(
               user: _user,
@@ -69,6 +80,8 @@ class _FoodInfoScreenState extends State<FoodInfoScreen> {
     setState(() {
       _json = responseJson;
       _calories = responseJson['foods'][0]['foodNutrients'][3]['value'];
+      _ncalories = _calories;
+      _foodname = responseJson['foods'][0]['description'];
     });
   }
 
@@ -93,24 +106,24 @@ class _FoodInfoScreenState extends State<FoodInfoScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => listRecipe(
                                     user: _user,
+                                    calories: _ncalories,
+                                    foodname: _foodname,
                                   ),
                                 ),
                               );
                             },
                             child: Text('Add to recipe')),
-                        Text("Calories per serving : $_calories\n",
+                        Text("Calories per serving : $_ncalories\n",
                             style: TextStyle(fontSize: 20)),
                         SizedBox(
-                          width: 100,
-                          child: TextField(
-                            decoration:
-                                new InputDecoration(labelText: "Servings"),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ], // Only numbers can be entered
-                          ),
-                        )
+                            width: 200,
+                            child: SpinBox(
+                              min: 1,
+                              max: 100,
+                              value: 1,
+                              onChanged: (value) =>
+                                  _ncalories = _ncalories + _calories,
+                            ))
                       ]));
             })));
   }
