@@ -23,5 +23,5 @@ For "Find Recipes", the application will list the existing recipes that the user
 ### Scan Barcode and Add Ingredient to Daily Food Intake:
 ![1](https://user-images.githubusercontent.com/66945628/133844294-445e791a-5a35-4104-b08e-777a3a8d3e51.gif)
 
-### 
+### Find Recipes:
 ![4](https://user-images.githubusercontent.com/66945628/133844991-29a39abb-baf9-4158-8c65-0743c489044c.gif)
