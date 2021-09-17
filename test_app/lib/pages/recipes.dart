@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_app/pages/recipe_details.dart';
+import 'package:test_app/pages/home.dart';
 
 /*
 void main() => runApp(MaterialApp(
@@ -69,8 +70,6 @@ class _listRecipeState extends State<listRecipe> {
     );
   }
 
-  // deleteRecipe() {}
-
   @override
   void initState() {
     _user = widget._user;
@@ -82,8 +81,20 @@ class _listRecipeState extends State<listRecipe> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Recipes"),
-        ),
+            title: Text("Recipes"),
+            automaticallyImplyLeading: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => BarcodeScreen(
+                      user: _user,
+                    ),
+                  ),
+                );
+              },
+            )),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               showDialog(
@@ -125,7 +136,7 @@ class _listRecipeState extends State<listRecipe> {
                             child: ListTile(
                                 title: Text(lists[index]['name']),
                                 trailing: Wrap(
-                                  spacing: 180,
+                                  spacing: 20,
                                   children: <Widget>[
                                     IconButton(
                                       icon: Icon(

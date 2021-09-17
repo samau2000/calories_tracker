@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:test_app/pages/recipes.dart';
 
 //stl -->
 class RecipeDetails extends StatefulWidget {
@@ -35,8 +36,22 @@ class _RecipeDetailsState extends State<RecipeDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Recipes"),
-        ),
+            title: Text("Recipes"),
+            automaticallyImplyLeading: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => listRecipe(
+                      user: _user,
+                      calories: null,
+                      foodname: null,
+                    ),
+                  ),
+                );
+              },
+            )),
         body: FutureBuilder(
             future: dbRef.once(),
             builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {

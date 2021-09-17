@@ -171,14 +171,14 @@ class _BarcodeScreenState extends State<BarcodeScreen> {
                                 },
                                 child: Padding(
                                   padding:
-                                      EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
                                   child: Text(
                                     'Sign Out',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                      letterSpacing: 2,
+                                      letterSpacing: 1,
                                     ),
                                   ),
                                 ),

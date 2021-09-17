@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:test_app/pages/home.dart';
 
 class DailyFoodScreen extends StatefulWidget {
   const DailyFoodScreen({Key? key, required User user})
@@ -13,6 +14,7 @@ class DailyFoodScreen extends StatefulWidget {
 }
 
 class _DailyFoodScreenState extends State<DailyFoodScreen> {
+  late User _user;
   final dbRef = FirebaseDatabase.instance.reference().child("Daily Food");
   List<Map<dynamic, dynamic>> lists = [];
 
@@ -20,8 +22,20 @@ class _DailyFoodScreenState extends State<DailyFoodScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Daily Intake"),
-        ),
+            title: Text("Daily Intake"),
+            automaticallyImplyLeading: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => BarcodeScreen(
+                      user: _user,
+                    ),
+                  ),
+                );
+              },
+            )),
         body: FutureBuilder(
             future: dbRef.once(),
             builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
