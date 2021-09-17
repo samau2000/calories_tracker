@@ -1,5 +1,7 @@
 # calories_tracker
 
+# Setup
+
 # Introduction
 In this calories tracker application, it will calculate calories of a recipe or food you eat by first use Gmail for authentication, scan the barcode of the ingredient, then ask for the user's amount of servings, and the user can keep track of all users recipes and daily food intake after adding the ingredients in either choice. To improve usability, we have used Flutter so that both Android and iOS users can have access to the application. 
 
