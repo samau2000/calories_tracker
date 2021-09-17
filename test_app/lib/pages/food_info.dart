@@ -33,9 +33,9 @@ class _FoodInfoScreenState extends State<FoodInfoScreen> {
 
   @override
   void initState() {
-    listCalories();
     _user = widget._user;
     _barcode = widget._barcode;
+    listCalories();
     super.initState();
   }
 

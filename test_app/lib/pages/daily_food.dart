@@ -19,6 +19,12 @@ class _DailyFoodScreenState extends State<DailyFoodScreen> {
   List<Map<dynamic, dynamic>> lists = [];
 
   @override
+  void initState() {
+    _user = widget._user;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
