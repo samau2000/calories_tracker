@@ -16,7 +16,7 @@ For "Find Recipes", the application will list the existing recipes that the user
 
 # Demo
 
-### Gmail Authentication:
+##### Gmail Authentication:
 ![3](https://user-images.githubusercontent.com/66945628/133844993-59b03c67-7fd6-41d7-b4b9-3e4efb4286c2.gif)
 
 ### Scan Barcode and Add Ingredient to Recipe:
