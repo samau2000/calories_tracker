@@ -13,6 +13,12 @@ For "Start barcode scan" button, it links straight to barcode scanning and user 
 For "Find Recipes", the application will list the existing recipes that the user has saved initially. User can select the recipe they want to learn more about the specific ingredients. User can also add or delete recipes. 
 
 ### Back-End
+This application has Google authentication integrated with it in order to let users sign in with their Google profiles and keep track of their dauly calories intake as well as their recipes. 
+
+The database was setup up so that each user is able to save their daily intake and the recipes they create. It is structed into by having an endpoint for the daily intake and one for the recipes. The daily intake is then tracked by creating a entry consisting of the food item name and the calories that correspond to it based on the number of servings. The recipe endpoint is structured to save the name of the recipe and the ingredient that are requird for it. The ingredients are saved as individual entries that contain the name of the ingredient and the calories associated with it.
+
+### Testing and Results
+The application was tested by installing it on an android phone and extensively testing out all the functionalities by scanning different food items, adding items to the daily intake, creating recipes and adding ingredients to recipes. Prior to testing the app directly on the phone, we tested the FDA API by using Postman in order to determine the format in which the data was returned, and what the API expected in the request. 
 
 ### Demo
 
