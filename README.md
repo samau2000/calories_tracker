@@ -1,6 +1,10 @@
 # calories_tracker
 
 ### Setup
+1. git clone https://github.com/samau2000/calories_tracker
+2. flutter pub get
+3. flutter pub upgrade
+4. flutter run 
 
 ### Introduction
 In this calories tracker application, it will calculate calories of a recipe or food you eat by first use Gmail for authentication, scan the barcode of the ingredient, then ask for the user's amount of servings, and the user can keep track of all users recipes and daily food intake after adding the ingredients in either choice. To improve usability, we have used Flutter so that both Android and iOS users can have access to the application. 
@@ -8,7 +12,9 @@ In this calories tracker application, it will calculate calories of a recipe or 
 ### Front-End
 On the Home page, we have three buttons: "Start barcode scan", "Find Recipes", and "Logout" after Gmail authentication. 
 
-For "Start barcode scan" button, it links straight to barcode scanning and user can provide the ingredient's barcode to the camera. After scanning, the application will provide the ingredient's information and the number of calories per serving for the ingredient. The user can then select the number of servings for the ingredient. Additionally, there are two buttons: "Save to daily tracker" and "Add to recipe". After clicking on "Save to daily tracker", the ingredient will automatically bring user to daily's food intake page. After clicking on "Add to recipe", the application will allow user to choose the recipe that they want to add the ingredient to.
+For "Start barcode scan" button, it links straight to barcode scanning and user can provide the ingredient's barcode to the camera. After scanning, the application will provide the ingredient's information and the number of calories per serving for the ingredient. The user can then select the number of servings for the ingredient. 
+
+Additionally, there are two buttons: "Save to daily tracker" and "Add to recipe". After clicking on "Save to daily tracker", the ingredient will automatically bring user to daily's food intake page. After clicking on "Add to recipe", the application will allow user to choose the recipe that they want to add the ingredient to.
 
 For "Find Recipes", the application will list the existing recipes that the user has saved initially. User can select the recipe they want to learn more about the specific ingredients. User can also add or delete recipes. 
 
@@ -33,3 +39,8 @@ The application was tested by installing it on an android phone and extensively 
 
 ##### Find Recipes:
 ![4](https://user-images.githubusercontent.com/66945628/133844991-29a39abb-baf9-4158-8c65-0743c489044c.gif)
+
+### References
+- https://pub.dev/packages/flutter_barcode_scanner
+- https://material.io/components/buttons/flutter
+- https://firebase.google.com/docs/flutter/setup?platform=android
