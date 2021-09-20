@@ -44,3 +44,5 @@ The application was tested by installing it on an android phone and extensively 
 - https://pub.dev/packages/flutter_barcode_scanner
 - https://material.io/components/buttons/flutter
 - https://firebase.google.com/docs/flutter/setup?platform=android
+- https://blog.codemagic.io/firebase-authentication-google-sign-in-using-flutter/
+- https://blog.codemagic.io/firebase-authentication-google-sign-in-using-flutter/
